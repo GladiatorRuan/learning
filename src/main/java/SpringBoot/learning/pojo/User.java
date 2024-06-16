@@ -13,6 +13,8 @@ import java.time.LocalDateTime;
 public class User {
     @NotNull
     private Integer id; //主键Id
+
+    @NotEmpty
     private String username; //用户名
     @JsonIgnore
     private String password;//密码
@@ -20,7 +22,7 @@ public class User {
     @NotEmpty
     @Pattern(regexp = "^\\S{1,10}")
     private String nickname;//昵称
-
+//
     @NotEmpty
     @Email
     private String email;//邮箱

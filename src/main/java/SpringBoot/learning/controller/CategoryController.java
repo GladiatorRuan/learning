@@ -4,10 +4,10 @@ import SpringBoot.learning.pojo.Category;
 import SpringBoot.learning.pojo.Result;
 import SpringBoot.learning.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/category")
@@ -16,16 +16,35 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
-    @PostMapping("/add")
-    public Result add(@RequestBody Category category){
+    @PostMapping
+    public Result add(@RequestBody @Validated Category category){
         categoryService.add(category);
         return Result.success();
     }
 
-    @PostMapping("/update")
-    public Result update(@RequestBody Category category){
+
+    @GetMapping
+    public Result<List<Category>> list(){
+        List<Category> cs = categoryService.list();
+        return Result.success(cs);
+    }
+
+    @GetMapping("/detail")
+    public Result<Category> detail(Integer id){
+        Category category =  categoryService.findById(id);
+        return Result.success(category);
+    }
+
+    @PutMapping
+    public Result update(@RequestBody @Validated Category category){
         categoryService.update(category);
         return Result.success();
     }
+
+//    @DeleteMapping
+//    public Result delete(Category category){
+//        categoryService.delete(category);
+//        return Result.success("删除成功！");
+//    }
 
 }

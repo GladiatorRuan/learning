@@ -4,8 +4,20 @@ spring:
     url: jdbc:mysql://localhost:3306/learning
     username: root
     password: quantum1234
+  data:
+    redis:
+      host: localhost
+      port: 6379
 
 mybatis:
   configuration:
     map-underscore-to-camel-case: true #开启驼峰命名和下划线转化
+
+#pagehelper:
+#  helperDialect: mysql
+#  reasonable: true
+#  supportMethodsArguments: true
+#  pageSizeZero: true
+#  params:
+#    count: countSql
 

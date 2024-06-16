@@ -1,29 +1,51 @@
 package SpringBoot.learning.controller;
 
+import SpringBoot.learning.pojo.Article;
+import SpringBoot.learning.pojo.PageBean;
 import SpringBoot.learning.pojo.Result;
-import SpringBoot.learning.utils.JwtUtil;
-import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import SpringBoot.learning.service.ArticleService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/article")
 public class ArticleController {
-    @GetMapping("/list")
-    public Result<String> list(@RequestHeader(name = "Authorization") String token, HttpServletResponse response) {
-//
-//        try {
-//            Map<String, Object> claims = JwtUtil.parseToken(token);
-//        } catch (Exception e) {
-//            //若失败，则http响应状态码是401
-//            response.setStatus(405);
-//            return Result.error("未登陆...");
-//        }
-        return Result.success("所有文章...");
+    @Autowired
+    private ArticleService articleService;
+
+    /**
+     * 传入文章内容
+     * @param article
+     * @return
+     */
+    @PostMapping
+    public Result add(@RequestBody @Validated Article article){
+        articleService.add(article);
+        return Result.success();
     }
+
+
+    /**
+     * 文章列表（条件分页）
+     * @param pageNum
+     * @param pageSize
+     * @param categoryId
+     * @param state
+     * @return
+     */
+    @GetMapping
+    public Result<PageBean<Article>> list(
+            Integer pageNum
+            , Integer pageSize
+            , @RequestParam(required = false) Integer categoryId
+            , @RequestParam(required = false) String state){
+
+        PageBean<Article> pb = articleService.list(pageNum, pageSize, categoryId, state);
+        return Result.success(pb);
+
+    }
+
+
 }
